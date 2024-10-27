@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>ElectroGenix - Product Price Comparison</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: url('https://static.vecteezy.com/system/resources/previews/031/231/216/non_2x/high-tech-electronic-circuit-board-background-neural-network-ai-generated-photo.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #f0f0f0;
+            font-family: 'Roboto', sans-serif;
+        }
+        .gradient-overlay {
+            background: rgba(0, 0, 0, 0.8);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .header {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            font-family: 'Pacifico', cursive;
+            font-size: 4rem;
+            font-weight: 300;
+            color: #00aaff;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+        }
+        h2 {
+            color: #00aaff;
+            font-weight: 500;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+        }
+        .form-control {
+            border: 2px solid #00aaff;
+            border-radius: 5px;
+            padding: 10px;
+            transition: box-shadow 0.3s;
+        }
+        .form-control:focus {
+            box-shadow: 0 0 10px rgba(0, 170, 255, 0.7);
+            border-color: #00aaff;
+        }
+        .btn-primary, .btn-secondary, .btn-clear, .btn-feedback {
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .btn-primary { background-color: #00aaff; }
+        .btn-primary:hover { background-color: #0088cc; box-shadow: 0 5px 15px rgba(0, 170, 255, 0.4); }
+        .btn-secondary { background-color: #17a2b8; }
+        .btn-secondary:hover { background-color: #138496; box-shadow: 0 5px 15px rgba(23, 162, 184, 0.4); }
+        .btn-clear { background-color: #ff4500; }
+        .btn-clear:hover { background-color: #d43f00; box-shadow: 0 5px 15px rgba(255, 69, 0, 0.4); }
+        .btn-feedback { background-color: #6c757d; }
+        .btn-feedback:hover { background-color: #5a6268; box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4); }
+        .help-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.3s;
+        }
+        .help-button:hover { transform: scale(1.05); background-color: #1e7e34; }
+        .mic-icon {
+            cursor: pointer;
+            color: #00aaff;
+            margin-left: 8px;
+            font-size: 1.5rem;
+            transition: transform 0.2s, color 0.2s;
+        }
+        .mic-icon:hover { color: #0088cc; transform: scale(1.1); }
+    </style>
+</head>
+<body>
+    <div class="gradient-overlay">
+        <div class="container">
+            <h1 class="header">ElectroGenix</h1>
+            <h2 class="text-center">Find the Best Deals on Electronics</h2>
+
+            <form id="searchForm" class="w-100">
+                <div class="form-group">
+                    <label for="brand">Brand:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="brand" name="brand" placeholder="Enter brand (e.g., Samsung, Apple)" required>
+                        <span class="mic-icon" onclick="startVoiceInput('brand')">&#x1F3A4;</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="product_type">Product Type:</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="product_type" name="product_type" placeholder="Enter product type (e.g., smartphone, laptop)" required>
+                        <span class="mic-icon" onclick="startVoiceInput('product_type')">&#x1F3A4;</span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Search</button>
+                <button type="button" class="btn btn-clear btn-block" onclick="clearSearch()">Clear Search</button>
+                <button type="button" class="btn btn-secondary btn-block" onclick="goHome()">Home</button>
+                <button type="button" class="btn btn-feedback btn-block" data-toggle="modal" data-target="#feedbackModal">Feedback</button>
+            </form>
+
+            <button class="help-button" data-toggle="modal" data-target="#helpModal">Help</button>
+        </div>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="color: black;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="feedbackModalLabel">Feedback</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <textarea id="feedbackText" class="form-control" placeholder="Leave your feedback here..." rows="4"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="submitFeedback()">Submit Feedback</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help Modal -->
+    <div class="modal fade" id="helpModal" tabindex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="color: black;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="helpModalLabel">How to Use ElectroGenix</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li>Enter a brand name and product type to search for specific products.</li>
+                        <li>Click "Search" to display matching products from different sites.</li>
+                        <li>If no products are found, you'll see a message indicating no matches.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const products = [
+            {name: "Samsung Galaxy S21", price: 799.99, link: "https://www.amazon.in/samsung-s21/s?k=samsung+s21", site: "Amazon", brand: "Samsung"},
+            {name: "Samsung Galaxy A52", price: 349.99, link: "https://www.flipkart.com/samsung-galaxy-a52-awesome-blue-128-gb/p/itmd757e78c38b83", site: "Flipkart", brand: "Samsung"},
+            {name: "Samsung Galaxy Z Fold3", price: 1799.99, link: "https://www.croma.com/samsung-galaxy-z-fold3", site: "Croma", brand: "Samsung"},
+            {name: "Samsung Galaxy S21 Ultra", price: 1199.99, link: "https://www.walmart.com/ip/samsung-galaxy-s21-ultra", site: "Walmart", brand: "Samsung"},
+            {name: "Samsung Galaxy M32", price: 199.99, link: "https://www.reliancedigital.in/samsung-galaxy-m32", site: "Reliance Digital", brand: "Samsung"},
+            {name: "Samsung Galaxy A12", price: 179.99, link: "https://www.flipkart.com/samsung-galaxy-a12", site: "Flipkart", brand: "Samsung"},
+            // Apple products
+            {name: "Apple iPhone 14", price: 999.99, link: "https://www.amazon.in/apple-iphone-14/s?k=iphone+14", site: "Amazon", brand: "Apple"},
+            {name: "Apple MacBook Air (M1)", price: 999.99, link: "https://www.flipkart.com/apple-macbook-air-m1-8-gb-256-gb-ssd-macos-big-sur/p/itmffb4bf18ab57e", site: "Flipkart", brand: "Apple"},
+            {name: "Apple iPad Pro 12.9-inch", price: 1099.99, link: "https://www.croma.com/apple-ipad-pro-12-9-inch-128-gb-wi-fi-only/p/201186393", site: "Croma", brand: "Apple"},
+            {name: "Apple iPhone 13", price: 799.99, link: "https://www.walmart.com/ip/apple-iphone-13", site: "Walmart", brand: "Apple"},
+            {name: "Apple MacBook Pro (M1)", price: 1299.99, link: "https://www.reliancedigital.in/apple-macbook-pro-m1-8-gb-256-gb/p/201186395", site: "Reliance Digital", brand: "Apple"}
+            
+        ];
+
+        function startVoiceInput(inputId) {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            recognition.start();
+
+            recognition.onresult = (event) => {
+                const speechResult = event.results[0][0].transcript;
+                document.getElementById(inputId).value = speechResult;
+            };
+        }
+
+        function clearSearch() {
+            document.getElementById("brand").value = "";
+            document.getElementById("product_type").value = "";
+        }
+
+        function goHome() {
+            window.location.href = "index.html";
+        }
+
+        function submitFeedback() {
+            const feedback = document.getElementById("feedbackText").value;
+            alert(`Thank you for your feedback: "${feedback}"`);
+            document.getElementById("feedbackText").value = "";
+        }
+
+        document.getElementById("searchForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const brand = document.getElementById("brand").value.trim().toLowerCase();
+            const productType = document.getElementById("product_type").value.trim().toLowerCase();
+            const filteredProducts = products.filter(product => 
+                product.brand.toLowerCase() === brand && 
+                product.name.toLowerCase().includes(productType)
+            );
+            localStorage.setItem('searchResults', JSON.stringify(filteredProducts));
+            window.location.href = 'results.html';
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
