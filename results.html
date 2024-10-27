@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Search Results - ElectroGenix</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: url('https://static.vecteezy.com/system/resources/previews/031/231/216/non_2x/high-tech-electronic-circuit-board-background-neural-network-ai-generated-photo.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            font-family: 'Roboto', sans-serif;
+        }
+        .gradient-overlay {
+            background: rgba(0, 0, 0, 0.8);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            width: 90%;
+            max-width: 800px;
+        }
+        h1 {
+            font-family: 'Pacifico', cursive;
+            color: #00aaff;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .table {
+            color: white;
+        }
+        th, td {
+            vertical-align: middle;
+        }
+        th {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .no-results {
+            text-align: center;
+            margin-top: 20px;
+            color: #ffc107;
+            font-weight: bold;
+        }
+        a {
+            color: #00aaff;
+        }
+        a:hover {
+            color: #ffc107;
+            text-decoration: underline;
+        }
+        img {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-overlay">
+        <div class="container">
+            <h1>Search Results</h1>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Link</th>
+                        <th>Site</th>
+                        <th>Brand</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsTableBody">
+                    <!-- Dynamic content here -->
+                </tbody>
+            </table>
+            <p id="noResultsMessage" class="no-results" style="display: none;">No results found for the given search criteria.</p>
+        </div>
+    </div>
+
+    <script>
+        const searchResults = JSON.parse(localStorage.getItem('searchResults'));
+        const resultsTableBody = document.getElementById("resultsTableBody");
+        const noResultsMessage = document.getElementById("noResultsMessage");
+
+        // Dummy image URLs for demonstration (replace with actual product image URLs)
+        const productImages = {
+            "Samsung Galaxy S21": "https://images.samsung.com/africa_en/smartphones/galaxy-s21/buy/galaxy-s21-phantom-violet.png",
+            "Samsung Galaxy A52": "https://m.media-amazon.com/images/I/81-nNnxa6VS.jpg",
+            "Samsung Galaxy Z Fold3": "https://i.gadgets360cdn.com/products/large/samsung-galaxy-z-fold-3-646x800-1628693757.jpg",
+            "Samsung Galaxy S21 Ultra": "https://www.motabhaielectronics.com/cdn/shop/products/Phone_667885d6-90c2-49e4-aac9-870f8ab0e6a6.jpg?v=1671205070",
+            "Samsung Galaxy M32": "https://5.imimg.com/data5/SELLER/Default/2022/1/ZF/OM/LA/11282390/71os5drhusl-sl1500-.jpg",
+            "Samsung Galaxy A12": "https://d2xamzlzrdbdbn.cloudfront.net/products/56aa3cad-8401-4265-b3df-90de800eae9121020548.jpg",
+
+            "Apple iPhone 14": "https://m.media-amazon.com/images/I/61bK6PMOC3L._AC_UF1000,1000_QL80_.jpg", 
+            "Apple MacBook Air (M1)": "https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111883_macbookair.png",
+            "Apple iPad Pro 12.9-inch": "https://ik.imagekit.io/3dqckpw4d/upload/11-inch_ipad_pro_wif_Silver1666372306ipad-pro-11inch-w-silver.png",
+            "Apple MacBook Pro (M1)": "https://www.aptronixindia.com/pub/media/catalog/product/m/a/macbook_pro_13_inch_intel_fileminimizer__1.png"
+            
+        };
+
+        if (searchResults && searchResults.length > 0) {
+            searchResults.forEach(product => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td><img src="${productImages[product.name]}" alt="${product.name} image"></td>
+                    <td>${product.name}</td>
+                    <td>$${product.price.toFixed(2)}</td>
+                    <td>
+                        <a href="${product.link}" target="_blank" 
+                           data-toggle="tooltip" 
+                           title="Visit ${product.site} for more details">
+                            Buy Now
+                        </a>
+                    </td>
+                    <td>${product.site}</td>
+                    <td>${product.brand}</td>
+                `;
+                resultsTableBody.appendChild(row);
+            });
+        } else {
+            noResultsMessage.style.display = "block";
+        }
+
+        // Initialize Bootstrap Tooltips
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
